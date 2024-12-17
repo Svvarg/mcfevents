@@ -77,6 +77,14 @@ processResources {
     }
 }
 
+
+// Disabling Gradle Module Metadata publication (*.module file to ~/.m2/repository)
+// to fix issue with group==null { "group": null, "module": "forgeBin", ...}
+// https://docs.gradle.org/current/userguide/publishing_gradle_module_metadata.html#sub:disabling-gmm-publication
+tasks.withType(GenerateModuleMetadata) {
+    enabled = false
+}
+
 // gradle publishToMavenLocal --> ~/.m2/repository/ ...
 publishing {
     publications {
