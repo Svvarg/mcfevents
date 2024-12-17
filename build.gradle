@@ -1,0 +1,102 @@
+buildscript {
+    repositories {
+        mavenLocal()
+        maven {
+            name = "maven"
+            url = "https://repo1.maven.org/maven2"
+        }
+        maven {
+            name = "Minecraft Forge"
+            url = "https://maven.minecraftforge.net/"
+        }
+    }
+    dependencies {
+        classpath ('com.anatawa12.forge:ForgeGradle:1.2-1.1.+') {
+            changing = true
+        }
+    }
+}
+
+plugins {
+    id 'java-library'
+    id 'maven-publish'
+}
+
+apply plugin: 'forge'
+
+sourceCompatibility = targetCompatibility = '1.8'
+compileJava {
+    sourceCompatibility = targetCompatibility = '1.8'
+}
+
+[compileJava, compileTestJava]*.options*.encoding = 'UTF-8' //Resources?
+compileJava.options.encoding = 'UTF-8'
+
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+}
+
+version = project.version
+group = project.group
+
+archivesBaseName = "${project.mod_id}"
+
+minecraft {
+    version = project.minecraft_version + "-" + project.forge_version
+    runDir = "run"
+}
+
+repositories {
+    mavenLocal()
+}
+
+dependencies {
+    // testImplementation 'junit:junit:4.13.2'
+}
+
+// Creates a compiled de-obfuscated jar
+task deobfJar(type: Jar) {
+    from sourceSets.main.output
+    archiveClassifier = 'dev' // appendix = 'deobf'
+}
+
+processResources {
+    duplicatesStrategy(DuplicatesStrategy.EXCLUDE)
+
+    inputs.property "version", project.version
+    inputs.property "mcversion", project.minecraft.version
+
+    from(sourceSets.main.resources.srcDirs) {
+        include 'mcmod.info'
+
+        expand 'version':project.version, 'mcversion':project.minecraft.version
+    }
+
+    from(sourceSets.main.resources.srcDirs) {
+        exclude 'mcmod.info'
+    }
+}
+
+// gradle publishToMavenLocal --> ~/.m2/repository/ ...
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+            artifact deobfJar
+            // remove all minecraftforge dependencies from the pom file
+            pom.withXml {
+                Node pomNode = asNode()
+                pomNode.dependencies.'*'.findAll() {
+                    it.artifactId.text() != ''
+                }.each() {
+                    it.parent().remove(it)
+                }
+            }
+        }
+    }
+
+    repositories {
+        mavenLocal()
+    }
+}
+
