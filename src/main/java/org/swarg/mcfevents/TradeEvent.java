@@ -6,7 +6,7 @@ import cpw.mods.fml.common.eventhandler.Cancelable;
 import net.minecraftforge.common.MinecraftForge;
 
 import net.minecraft.item.ItemStack;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.Entity;
 
 /**
  * Для лавок в которых возможен обмен один-на-один
@@ -16,8 +16,8 @@ import net.minecraft.entity.player.EntityPlayer;
  */
 @Cancelable
 public class TradeEvent extends Event {
-    /* игрок который купил товар */
-    public final EntityPlayer buyer;
+    /* игрок или npc который купил товар */
+    public final Entity buyer;
     /* имя продавца у которого был куплен товар */
     public final String seller;
     /* товар который купил игрок у продавца */
@@ -29,7 +29,7 @@ public class TradeEvent extends Event {
     public final boolean npc;
 
 
-    public TradeEvent(EntityPlayer buyer, String seller, ItemStack good, ItemStack pay)
+    public TradeEvent(Entity buyer, String seller, ItemStack good, ItemStack pay)
     {
         this.buyer = buyer;
         this.seller = seller;
@@ -40,7 +40,7 @@ public class TradeEvent extends Event {
     }
 
 
-    public TradeEvent(EntityPlayer buyer, String seller, ItemStack good,
+    public TradeEvent(Entity buyer, String seller, ItemStack good,
         ItemStack pay, ItemStack pay2, boolean isNpc
     ) {
         this.buyer = buyer;
@@ -60,7 +60,7 @@ public class TradeEvent extends Event {
      * @param pay
      * @return true - cancelled (отменить сделку)
      */
-    public static boolean fireTradeEvent(EntityPlayer buyer, String seller,
+    public static boolean fireTradeEvent(Entity buyer, String seller,
         ItemStack good, ItemStack pay
     ) {
         return fireTradeEvent(buyer, seller, good, pay, null, false);
@@ -77,7 +77,7 @@ public class TradeEvent extends Event {
      * @param isNpc
      * @return true - cancelled (отменить сделку)
      */
-    public static boolean fireTradeEvent(EntityPlayer buyer, String seller,
+    public static boolean fireTradeEvent(Entity buyer, String seller,
         ItemStack good, ItemStack pay, ItemStack pay2, boolean isNpc
     ) {
         if (buyer != null && !buyer.worldObj.isRemote && pay != null && good != null) {
