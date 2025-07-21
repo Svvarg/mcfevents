@@ -1,4 +1,6 @@
-# org.swarg.mcfevent.INonPhysicalReward
+# org.swarg.mcfevent.IExtraReward
+
+- один из более узкоспециализированных псевдонимов INonPhysicalReward:
 
 Основная идея:
 Мост между разными модами, позволяющий на лету преобразовывать награды за квесты
