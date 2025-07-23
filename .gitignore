@@ -2,6 +2,7 @@ bin/
 build/
 .gradle/
 doc/devnotes.md
+doc/hidden/
 .classpath
 .project
 .settings/

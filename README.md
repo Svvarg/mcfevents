@@ -41,4 +41,10 @@ gradle publishToMavenLocal
 
 - MCFBackendLib
 - MerchantsTFC 1.2+
+- MCFCoreFix 0.4+
 - LevelUp 2.3+
+
+
+## TODOList
+- Событие на изменение квеста. Например для того чтобы обновлять общее кол-во
+  опыта которые можно получить со всех квестов для RPG-системы
